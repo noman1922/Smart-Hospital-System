@@ -1,0 +1,82 @@
+﻿@{
+    ViewData["Title"] = "Allocate Bed";
+    var patient = ViewBag.Patient as Patient;
+    var availableBeds = ViewBag.AvailableBeds as List<Bed> ?? new List<Bed>();
+}
+
+@if (patient == null)
+{
+    <div class="alert alert-danger shadow-sm">
+        <i class="fas fa-exclamation-triangle me-2"></i>Patient not found!
+    </div>
+}
+else
+{
+    <h2 class="fw-bold mb-4">
+        <i class="fas fa-bed text-primary me-2"></i>Allocate Bed
+    </h2>
+
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+            <div class="row text-center">
+                <div class="col-md-3"><strong>@patient.PatientName</strong></div>
+                <div class="col-md-2">Age: @patient.Age</div>
+                <div class="col-md-2">O₂: @patient.OxygenLevel%</div>
+                <div class="col-md-2">Temp: @patient.Temperature°C</div>
+                <div class="col-md-3">
+                    @if (patient.IsCritical)
+                    {
+                        <span class="badge bg-danger">CRITICAL</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">STABLE</span>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h5 class="fw-bold mb-3">Available Beds</h5>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Ward</th>
+                    <th>Type</th>
+                    <th>Sanitized</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var bed in availableBeds)
+                {
+                    <tr>
+                        <td>@bed.WardName</td>
+                        <td>
+                            <span class="badge @(bed.BedType == BedType.ICU ? "bg-danger" : "bg-primary")">
+                                @bed.BedType
+                            </span>
+                        </td>
+                        <td>@bed.LastSanitized.ToString("MM/dd/yyyy HH:mm")</td>
+                        <td>
+                            <span class="badge @(bed.SanitationStatus == "OVERDUE" ? "bg-warning" : "bg-success")">
+                                @bed.SanitationStatus
+                            </span>
+                        </td>
+                        <td>
+                            <form method="post" action="/Home/AllocateBed/@patient.PatientID">
+                                <input type="hidden" name="bedId" value="@bed.BedID" />
+                                <button class="btn btn-sm btn-success">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

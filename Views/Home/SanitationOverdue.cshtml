@@ -1,0 +1,70 @@
+﻿@model List<Bed>
+@{
+    ViewData["Title"] = "Sanitation Overdue Beds";
+}
+
+<h2 class="fw-bold mb-4 text-warning">
+    <i class="fas fa-broom me-2"></i>Sanitation Overdue Beds
+</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-success shadow-sm">
+        <i class="fas fa-check-circle me-2"></i>All beds are sanitized.
+    </div>
+}
+else
+{
+    <div class="alert alert-warning shadow-sm mb-4">
+        <strong>@Model.Count</strong> beds require sanitation!
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-warning">
+                    <tr>
+                        <th>Ward</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Last Sanitized</th>
+                        <th>Overdue</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var bed in Model)
+                    {
+                        var hoursOverdue = Math.Max(0, (int)(DateTime.Now - bed.LastSanitized).TotalHours - 48);
+                        <tr>
+                            <td>@bed.WardName</td>
+                            <td>
+                                <span class="badge @(bed.BedType == BedType.ICU ? "bg-danger" : "bg-primary")">
+                                    @bed.BedType
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge @(bed.IsOccupied ? "bg-danger" : "bg-success")">
+                                    @(bed.IsOccupied ? "OCCUPIED" : "AVAILABLE")
+                                </span>
+                            </td>
+                            <td>@bed.LastSanitized.ToString("MM/dd/yyyy HH:mm")</td>
+                            <td><span class="badge bg-danger">@hoursOverdue h</span></td>
+                            <td class="text-end">
+                                <form method="post" action="/Home/SanitizeBed/@bed.BedID">
+                                    <button class="btn btn-sm btn-success">
+                                        <i class="fas fa-broom"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+<a href="/" class="btn btn-outline-secondary mt-4">
+    <i class="fas fa-arrow-left me-2"></i>Back
+</a>

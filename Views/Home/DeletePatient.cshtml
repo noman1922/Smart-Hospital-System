@@ -1,0 +1,38 @@
+﻿@model Patient
+@{
+    ViewData["Title"] = "Delete Patient";
+}
+
+<h2 class="fw-bold mb-4 text-danger">
+    <i class="fas fa-user-times me-2"></i>Delete Patient
+</h2>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body">
+
+        <div class="alert alert-danger">
+            <strong>Are you sure?</strong> This action cannot be undone.
+        </div>
+
+        <div class="card bg-light mb-3">
+            <div class="card-body">
+                <p><strong>Name:</strong> @Model.PatientName</p>
+                <p><strong>Age:</strong> @Model.Age</p>
+                <p><strong>Disease:</strong> @Model.DiseaseCategory</p>
+                <p>
+                    <strong>Status:</strong>
+                    <span class="badge @(Model.IsCritical ? "bg-danger" : "bg-success")">
+                        @(Model.IsCritical ? "CRITICAL" : "STABLE")
+                    </span>
+                </p>
+            </div>
+        </div>
+
+        <form method="post">
+            <button class="btn btn-danger me-2">
+                <i class="fas fa-trash me-2"></i>Delete
+            </button>
+            <a href="/Home/Patients" class="btn btn-outline-secondary">Cancel</a>
+        </form>
+    </div>
+</div>

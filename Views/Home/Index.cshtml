@@ -1,0 +1,144 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h2 class="mb-4 fw-bold text-dark">
+    <i class="fas fa-tachometer-alt me-2 text-primary"></i>Hospital Dashboard
+</h2>
+
+<!-- ================= SUMMARY CARDS ================= -->
+<div class="row g-4">
+    <div class="col-md-3">
+        <div class="card shadow-sm border-0 dashboard-card bg-primary text-white">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-uppercase">Patients</h6>
+                    <h2 class="fw-bold">@ViewBag.TotalPatients</h2>
+                    <a href="/Home/Patients" class="text-white text-decoration-none small">
+                        View All →
+                    </a>
+                </div>
+                <i class="fas fa-users fa-3x opacity-50"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm border-0 dashboard-card bg-warning text-white">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-uppercase">Critical</h6>
+                    <h2 class="fw-bold">@ViewBag.CriticalPatients</h2>
+                    <a href="/Home/CriticalPatients" class="text-white text-decoration-none small">
+                        View Critical →
+                    </a>
+                </div>
+                <i class="fas fa-exclamation-triangle fa-3x opacity-50"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm border-0 dashboard-card bg-secondary text-white">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-uppercase">Beds</h6>
+                    <h2 class="fw-bold">@ViewBag.AvailableBeds</h2>
+                    <a href="/Home/Beds" class="text-white text-decoration-none small">
+                        View Beds →
+                    </a>
+                </div>
+                <i class="fas fa-bed fa-3x opacity-50"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm border-0 dashboard-card bg-success text-white">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-uppercase">Sanitation</h6>
+                    <h2 class="fw-bold">@ViewBag.OverdueBeds</h2>
+                    <a href="/Home/SanitationOverdue" class="text-white text-decoration-none small">
+                        View Overdue →
+                    </a>
+                </div>
+                <i class="fas fa-broom fa-3x opacity-50"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================= ACTIONS & RULES ================= -->
+<div class="row mt-5 g-4">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-white fw-bold">
+                <i class="fas fa-bolt text-primary me-2"></i>Quick Actions
+            </div>
+            <div class="card-body">
+                <a href="/Home/CreatePatient" class="btn btn-primary w-100 mb-3">
+                    <i class="fas fa-user-plus me-2"></i>Appoint New Patient
+                </a>
+                <a href="/Home/CreateBed" class="btn btn-success w-100 mb-3">
+                    <i class="fas fa-bed me-2"></i>Assign New Bed
+                </a>
+                <a href="/Home/Alerts" class="btn btn-danger w-100">
+                    <i class="fas fa-bell me-2"></i>
+                    Notifications (@ViewBag.UnreadAlerts unread)
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-white fw-bold">
+                <i class="fas fa-clipboard-check text-success me-2"></i>System Rules
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <i class="fas fa-heartbeat text-danger me-2"></i>
+                        Oxygen Level &lt; 92% = Critical
+                    </li>
+                    <li class="list-group-item">
+                        <i class="fas fa-procedures text-warning me-2"></i>
+                        ICU beds are for critical patients only
+                    </li>
+                    <li class="list-group-item">
+                        <i class="fas fa-clock text-info me-2"></i>
+                        Bed must be sanitized within 48 hours
+                    </li>
+                    <li class="list-group-item">
+                        <i class="fas fa-thermometer-half text-success me-2"></i>
+                        Temperature between 35°C – 42°C
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================= FOOTER ================= -->
+<footer class="mt-5 py-4 bg-dark text-light text-center small">
+    © 2025 — SMART HOSPITAL MANAGEMENT SYSTEM <br />
+    <span class="text-muted">Created by Taufiq</span>
+</footer>
+
+<!-- ================= CUSTOM STYLE ================= -->
+<style>
+    .dashboard-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        border-radius: 14px;
+    }
+
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    .opacity-50 {
+        opacity: 0.5;
+    }
+</style>

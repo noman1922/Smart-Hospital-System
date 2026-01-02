@@ -1,0 +1,49 @@
+﻿@model Bed
+@{
+    ViewData["Title"] = "Edit Bed";
+}
+
+<h2 class="fw-bold mb-4">
+    <i class="fas fa-edit text-primary me-2"></i>Edit Bed
+</h2>
+
+<form method="post">
+    <input type="hidden" asp-for="BedID" />
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Ward Name</label>
+                    <input asp-for="WardName" class="form-control">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Bed Type</label>
+                    <select asp-for="BedType" class="form-select">
+                        <option value="General">General</option>
+                        <option value="ICU">ICU</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Last Sanitized</label>
+                <input asp-for="LastSanitized" type="datetime-local" class="form-control">
+            </div>
+
+            <div class="alert alert-info">
+                Current Status:
+                <span class="badge @(Model.IsOccupied ? "bg-danger" : "bg-success") ms-2">
+                    @(Model.IsOccupied ? "OCCUPIED" : "AVAILABLE")
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <button class="btn btn-primary me-2">
+            <i class="fas fa-save me-2"></i>Update
+        </button>
+        <a href="/Home/Beds" class="btn btn-outline-secondary">Cancel</a>
+    </div>
+</form>

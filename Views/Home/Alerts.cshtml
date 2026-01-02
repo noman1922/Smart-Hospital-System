@@ -1,0 +1,77 @@
+﻿@model List<Alert>
+@{
+    ViewData["Title"] = "Alerts";
+}
+
+<h2 class="mb-4 fw-bold">
+    <i class="fas fa-bell text-danger me-2"></i>System Alerts
+</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info shadow-sm">
+        <i class="fas fa-info-circle me-2"></i>No alerts at the moment.
+    </div>
+}
+else
+{
+    <div class="d-flex align-items-center mb-4">
+        <span class="badge bg-danger me-2">@HospitalData.GetUnreadAlerts().Count unread</span>
+        <span class="badge bg-secondary">@Model.Count total</span>
+
+        <form method="post" action="/Home/ClearAllAlerts" class="ms-auto">
+            <button type="submit" class="btn btn-sm btn-outline-danger">
+                <i class="fas fa-trash-alt me-1"></i>Clear All
+            </button>
+        </form>
+    </div>
+
+    @foreach (var alert in Model)
+    {
+        <div class="card shadow-sm mb-3 border-0">
+            <div class="card-body d-flex justify-content-between">
+                <div>
+                    <h6 class="fw-bold mb-1">
+                        <i class="fas @(alert.AlertType == AlertType.CriticalVital ? "fa-heartbeat text-danger" :
+                                        alert.AlertType == AlertType.SanitationOverdue ? "fa-broom text-warning" :
+                                        alert.AlertType == AlertType.BedAllocationFailure ? "fa-times-circle text-danger" :
+                                        "fa-check-circle text-success") me-2"></i>
+                        @alert.AlertType
+                        @if (!alert.IsRead)
+                        {
+                            <span class="badge bg-danger ms-2">NEW</span>
+                        }
+                    </h6>
+
+                    <p class="mb-1 text-muted">@alert.Message</p>
+
+                    @if (!string.IsNullOrEmpty(alert.PatientName))
+                    {
+                        <small class="me-3"><i class="fas fa-user me-1"></i>@alert.PatientName</small>
+                    }
+                    @if (!string.IsNullOrEmpty(alert.BedInfo))
+                    {
+                        <small><i class="fas fa-bed me-1"></i>@alert.BedInfo</small>
+                    }
+                </div>
+
+                <div class="text-end">
+                    <small class="text-muted d-block">@alert.CreatedAt.ToString("MM/dd/yyyy HH:mm")</small>
+
+                    @if (!alert.IsRead)
+                    {
+                        <form method="post" action="/Home/MarkAlertAsRead/@alert.AlertID" class="mt-2">
+                            <button class="btn btn-sm btn-outline-success">
+                                <i class="fas fa-check"></i>
+                            </button>
+                        </form>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+}
+
+<a href="/" class="btn btn-outline-secondary mt-3">
+    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+</a>

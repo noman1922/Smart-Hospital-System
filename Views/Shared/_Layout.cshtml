@@ -1,0 +1,206 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Smart Hospital System</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Global Style -->
+    <style>
+        body {
+            background: #f4f6f9;
+            font-family: "Segoe UI", system-ui, sans-serif;
+        }
+
+        /* ================= NAVBAR ================= */
+        .navbar {
+            background: linear-gradient(90deg, #dc3545, #b02a37);
+        }
+
+        .navbar-brand {
+            font-weight: 600;
+            letter-spacing: .5px;
+        }
+
+        /* ================= SIDEBAR ================= */
+        .sidebar {
+            background: #1f2933;
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        .sidebar h5, .sidebar h6 {
+            color: #9ca3af;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        .sidebar a {
+            color: #e5e7eb;
+            text-decoration: none;
+            padding: 10px 12px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+            transition: background .2s ease;
+        }
+
+        .sidebar a i {
+            width: 20px;
+        }
+
+        .sidebar a:hover {
+            background: #374151;
+        }
+
+        .sidebar a.active {
+            background: #dc3545;
+            font-weight: 600;
+        }
+
+        /* ================= MAIN CONTENT ================= */
+        .content-wrapper {
+            padding: 24px;
+        }
+
+        /* ================= CARDS ================= */
+        .card {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,.06);
+        }
+
+        /* ================= BADGES ================= */
+        .badge-critical { background: #dc3545; }
+        .badge-stable { background: #28a745; }
+        .badge-icu { background: #0d6efd; }
+        .badge-general { background: #6c757d; }
+
+        /* ================= TABLE ================= */
+        table thead th {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+        }
+
+        .table-danger {
+            background-color: #f8d7da !important;
+        }
+
+        .alert-overdue {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+        }
+
+        /* ================= ALERTS ================= */
+        .alert {
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <nav class="navbar navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-hospital me-2"></i>Smart Hospital System
+            </a>
+        </div>
+    </nav>
+
+    <!-- ================= LAYOUT ================= -->
+    <div class="container-fluid">
+        <div class="row">
+
+            <!-- ================= SIDEBAR ================= -->
+            <aside class="col-md-2 sidebar p-3">
+                <h5 class="mb-3">
+                    <i class="fas fa-bars me-2"></i>Menu
+                </h5>
+
+                <a href="/" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")">
+                    <i class="fas fa-chart-line me-2"></i>Dashboard
+                </a>
+
+                <a href="/Home/Patients">
+                    <i class="fas fa-users me-2"></i>Patients
+                </a>
+
+                <a href="/Home/Beds">
+                    <i class="fas fa-bed me-2"></i>Beds
+                </a>
+
+                <a href="/Home/Alerts">
+                    <i class="fas fa-bell me-2"></i>Alerts
+                    @{
+                        var unread = HospitalData.GetUnreadAlerts().Count;
+                        if (unread > 0)
+                        {
+                            <span class="badge bg-danger ms-auto">@unread</span>
+                        }
+                    }
+                </a>
+
+                <hr class="border-secondary my-3">
+
+                <h6 class="mb-2">
+                    <i class="fas fa-filter me-2"></i>Filters
+                </h6>
+
+                <a href="/Home/CriticalPatients">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Critical
+                </a>
+
+                <a href="/Home/PatientsRequiringICU">
+                    <i class="fas fa-heartbeat me-2"></i>Need ICU
+                </a>
+
+                <a href="/Home/UnallocatedPatients">
+                    <i class="fas fa-user-clock me-2"></i>Unallocated
+                </a>
+
+                <a href="/Home/SanitationOverdue">
+                    <i class="fas fa-broom me-2"></i>Sanitation
+                </a>
+            </aside>
+
+            <!-- ================= MAIN CONTENT ================= -->
+            <main class="col-md-10 content-wrapper">
+
+                @if (TempData["Message"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show">
+                        <i class="fas fa-check-circle me-2"></i>@TempData["Message"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+
+                @if (TempData["Error"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        <i class="fas fa-exclamation-triangle me-2"></i>@TempData["Error"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+
+                @RenderBody()
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

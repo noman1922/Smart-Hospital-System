@@ -1,0 +1,23 @@
+﻿a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.btn {
+    border-radius: 8px;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f1f5f9;
+}
+
+.footer {
+    position: relative;
+    padding: 12px;
+    background: #1f2933;
+    color: #d1d5db;
+    text-align: center;
+}
